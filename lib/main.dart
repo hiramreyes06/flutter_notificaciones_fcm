@@ -34,7 +34,6 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
 //Aqui ya tenemos un contexto, para poder reaccionar a las notificaciones y navegar
-
   FCMService.messagesStream.listen((message) { 
 
     print('My app: $message');
