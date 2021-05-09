@@ -1,0 +1,59 @@
+Primero tenemos que verificar que el proyecto de flutter use la verson 2.12.0 del sdk
+para que tome en cuenta el null safy, se cambia en el archivo 
+pubspec.yaml
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+
+Despues necesitamos generar una firma sha1, una forma de hacerlo, es dentro del proyecto
+en la ruta /android
+
+ejecutamos
+
+gradlew signingReport
+
+Y esto generara el sha necesario para firebase , ydescargamos el google-services.json
+
+Ahora nos vamos a android/build.gradle y agregamos la dependencia
+
+dependencies {
+        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.gms:google-services:4.3.5'
+    }
+
+Ahora nos vamos a android/app/build.gradle y agregamos las dependencias
+
+apply plugin: 'com.google.gms.google-services'
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation platform('com.google.firebase:firebase-bom:27.1.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+}
+
+Modifimamos la version minima del sdk , para no agregar la configuracion de multiplex
+
+defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId "com.luishiramreyes.push_notification"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
+
+
+Ahora colocamos el archivo google-services.json en 
+android/app
+
+Ahora instalamos el paquete de firebase cloud message en el pubspec.yaml
+
+firebase_messaging: ^9.1.3
+
+
+
+
+
+

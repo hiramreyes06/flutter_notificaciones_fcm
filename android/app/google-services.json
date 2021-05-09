@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "63509306551",
+    "firebase_url": "https://notificaciones-c329d.firebaseio.com",
+    "project_id": "notificaciones-c329d",
+    "storage_bucket": "notificaciones-c329d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:63509306551:android:1e4f9552924db2ec46c132",
+        "android_client_info": {
+          "package_name": "com.luishiramreyes.push_notification"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "63509306551-df0h2j9lehbqrc9usukptj373vhhae7r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAr8WBo1VEq3QBXKfUaeIue5cHb7IHRZ9w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "63509306551-df0h2j9lehbqrc9usukptj373vhhae7r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

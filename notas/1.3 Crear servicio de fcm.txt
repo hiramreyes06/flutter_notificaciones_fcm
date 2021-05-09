@@ -1,0 +1,137 @@
+Primero necesitamos instalar el paquete firebase core en el pubspec.yaml
+
+firebase_core: ^1.1.0
+
+
+
+import 'dart:async';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+
+class FCMService{
+
+  //Asi cargamos la instancea que necesita firebase
+  static FirebaseMessaging messaging = FirebaseMessaging.instance;
+  static String? token;
+
+  //De esta forma creamos un stream que emititra el evento al recibir una notificacion
+  //para asi poder ser escuchada desde otros widgets
+  static StreamController<String> _messageStrean = new StreamController.broadcast();
+  static Stream<String> get messagesStream => _messageStrean.stream;
+
+
+  static Future _onBackgroungMessage( RemoteMessage message) async{
+
+    print('Notificacion desde el background ${message.messageId}');
+      //Asi emitimos el evento a traves del stream
+    _messageStrean.add( message.notification?.title ?? 'Sin titulo');
+  }
+
+  static Future _onMessageHandler( RemoteMessage message) async{
+
+    print('Notificacion desde el background ${message.messageId}');
+
+    print('Data recibida de la notificacion ${message.data}');
+
+    _messageStrean.add( message.notification?.title ?? 'Sin titulo');
+  }
+
+  static Future _onMessageOpenApp( RemoteMessage message) async{
+
+    print('Notificacion desde el background ${message.messageId}');
+
+    _messageStrean.add( message.notification?.title ?? 'Sin titulo');
+  }
+
+//Este metodo inicializa la configuracion de la app y obtenemos el token
+  static Future initializeApp() async{
+
+     await Firebase.initializeApp();
+
+     token = await FirebaseMessaging.instance.getToken();
+
+      //Asi asignamos los callback para manejar los eventos de las notificaciones
+      //Cuando la app esta en el background, ya sea cerrada
+      FirebaseMessaging.onBackgroundMessage( _onBackgroungMessage );
+      //Cuando llega una notificacion mientras la app esta abierta
+      FirebaseMessaging.onMessage.listen( _onMessageHandler );
+      //Cuando se el usuario abre la notificacion 
+      FirebaseMessaging.onMessageOpenedApp.listen( _onMessageOpenApp);
+
+
+
+     print('Este es el token generado del usuario: $token');
+
+  }
+
+  static closStreams(){
+    _messageStrean.close();
+  }
+
+
+}
+
+
+Para poder estar al tanto de estos eventos es necesario iniciarlo desde el widget principal
+para asi poder realizar diferentes acciones.
+Para eso es necesario que nuestro widget pricipal carge de forma asyncrona para que
+cargen los widget necesarios y asi poder escuchar los eventos, ademas de actualizar
+el estado de la aplicacion
+
+
+void main() async {
+
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await FCMService.initializeApp();
+
+runApp(MyApp());
+
+}
+ 
+ //Es necesario convertir el widget principal a un statfull
+class MyApp extends StatefulWidget {
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+
+  //Es necesario marcar el estado de la app para escuchar las notificaciones
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+//Aqui ya tenemos un contexto, para poder reaccionar a las notificaciones y navegar
+
+  FCMService.messagesStream.listen((message) { 
+
+    print('My app: $message');
+
+  });
+
+
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Material App',
+      debugShowCheckedModeBanner: false,
+
+      initialRoute: 'home',
+      routes: {
+        'home' : ( _ ) => HomeScrenn(),
+        'message': ( _ ) => Message()
+      },
+
+    );
+  }
+}

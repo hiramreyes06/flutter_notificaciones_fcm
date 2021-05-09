@@ -1,0 +1,25 @@
+Para identificar el id generado automatica, nos vamos a la ruta
+android/app/build.gradle
+
+El cual es un archivo de configuracion, y en la parte defaultConfig {
+tiene el id generado, para buscar todas las referencias al id, presionamos las teclas
+
+ctr + shift + f
+
+Los archivos que debemos modificar son:
+AndroidManifest.xml //debugger
+AndroidManifest.xml //Del src main
+MainActivity.kt
+
+Con al archivo MainActivity tenemos que renombar la ruta de archivos en base a nuestro id
+
+android/app/src/main/kotlin
+
+Tenemos que agregar como ruta cada una de las partes de nuestro id por cada .
+
+com.hiramreyes.notificaciones_fcm
+
+quedaria asi
+kotlin/com/hiramreyes/notificaciones_fcm
+
+Y Corremos de nuevo el proyecto
